@@ -20,27 +20,27 @@ Route::prefix('v1')->group(function (): void {
         Route::post('/register', [MemberAuthController::class, 'register']);
         Route::post('/login', [MemberAuthController::class, 'login']);
 
-        Route::middleware('auth:api')->group(function (): void {
+        Route::middleware(['auth:member-api', 'abilities:member-api'])->group(function (): void {
             Route::post('/logout', [MemberAuthController::class, 'logout']);
             Route::get('/profile', [MemberAuthController::class, 'profile']);
         });
     });
 
-    Route::middleware('auth:api')->prefix('cart')->group(function (): void {
+    Route::middleware(['auth:member-api', 'abilities:member-api'])->prefix('cart')->group(function (): void {
         Route::get('/', [CartController::class, 'index']);
         Route::post('/items', [CartController::class, 'addItem']);
         Route::put('/items/{id}', [CartController::class, 'updateItem']);
         Route::delete('/items/{id}', [CartController::class, 'removeItem']);
     });
 
-    Route::middleware('auth:api')->prefix('orders')->group(function (): void {
+    Route::middleware(['auth:member-api', 'abilities:member-api'])->prefix('orders')->group(function (): void {
         Route::post('/checkout', [OrderController::class, 'checkout']);
         Route::get('/', [OrderController::class, 'index']);
         Route::get('/{uuid}', [OrderController::class, 'show']);
         Route::get('/{uuid}/payments', [PaymentController::class, 'indexForOrder']);
     });
 
-    Route::middleware('auth:api')->prefix('payments')->group(function (): void {
+    Route::middleware(['auth:member-api', 'abilities:member-api'])->prefix('payments')->group(function (): void {
         Route::post('/', [PaymentController::class, 'store']);
         Route::post('/{id}/success', [PaymentController::class, 'success']);
         Route::post('/{id}/failed', [PaymentController::class, 'failed']);
@@ -54,7 +54,7 @@ Route::prefix('v1')->group(function (): void {
     Route::prefix('admin')->group(function (): void {
         Route::post('/login', [AdminAuthController::class, 'login']);
 
-        Route::middleware(['auth:admin-api', 'admin.guard'])->group(function (): void {
+        Route::middleware(['auth:admin-api', 'abilities:admin-api'])->group(function (): void {
             Route::post('/logout', [AdminAuthController::class, 'logout']);
             Route::get('/profile', [AdminAuthController::class, 'profile']);
 

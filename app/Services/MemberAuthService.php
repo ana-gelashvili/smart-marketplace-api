@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Interfaces\MemberAuthServiceInterface;
 use App\Models\Member;
 use Illuminate\Support\Facades\Hash;
-use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 
 class MemberAuthService implements MemberAuthServiceInterface
 {
@@ -33,11 +32,11 @@ class MemberAuthService implements MemberAuthServiceInterface
 
     public function issueToken(Member $member): string
     {
-        return JWTAuth::fromUser($member);
+        return $member->createToken('member-token', ['member-api'])->plainTextToken;
     }
 
-    public function logout(): void
+    public function logout(Member $member): void
     {
-        auth('api')->logout();
+        $member->currentAccessToken()->delete();
     }
 }

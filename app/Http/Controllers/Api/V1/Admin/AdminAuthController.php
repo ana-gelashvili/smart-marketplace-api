@@ -7,12 +7,13 @@ use App\Http\Requests\AdminLoginRequest;
 use App\Http\Resources\Api\V1\AdminResource;
 use App\Interfaces\AdminAuthServiceInterface;
 use App\Traits\ApiResponse;
+use App\Traits\ResolvesAuthenticatedAdmin;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class AdminAuthController extends Controller
 {
-    use ApiResponse;
+    use ApiResponse, ResolvesAuthenticatedAdmin;
 
     public function __construct(
         private readonly AdminAuthServiceInterface $authService,
@@ -34,9 +35,9 @@ class AdminAuthController extends Controller
         ], 'Login successful');
     }
 
-    public function logout(): JsonResponse
+    public function logout(Request $request): JsonResponse
     {
-        $this->authService->logout();
+        $this->authService->logout($this->authenticatedAdmin($request));
 
         return $this->successResponse(null, 'Logged out successfully');
     }

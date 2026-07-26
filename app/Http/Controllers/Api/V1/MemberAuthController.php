@@ -8,12 +8,13 @@ use App\Http\Requests\RegisterMemberRequest;
 use App\Http\Resources\MemberResource;
 use App\Interfaces\MemberAuthServiceInterface;
 use App\Traits\ApiResponse;
+use App\Traits\ResolvesAuthenticatedMember;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class MemberAuthController extends Controller
 {
-    use ApiResponse;
+    use ApiResponse, ResolvesAuthenticatedMember;
 
     public function __construct(
         private readonly MemberAuthServiceInterface $authService,
@@ -46,9 +47,9 @@ class MemberAuthController extends Controller
         ], 'Login successful');
     }
 
-    public function logout(): JsonResponse
+    public function logout(Request $request): JsonResponse
     {
-        $this->authService->logout();
+        $this->authService->logout($this->authenticatedMember($request));
 
         return $this->successResponse(null, 'Logged out successfully');
     }

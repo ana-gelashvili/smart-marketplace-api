@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Interfaces\AdminAuthServiceInterface;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
-use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 
 class AdminAuthService implements AdminAuthServiceInterface
 {
@@ -25,11 +24,11 @@ class AdminAuthService implements AdminAuthServiceInterface
 
     public function issueToken(User $user): string
     {
-        return JWTAuth::fromUser($user);
+        return $user->createToken('admin-token', ['admin-api'])->plainTextToken;
     }
 
-    public function logout(): void
+    public function logout(User $user): void
     {
-        auth('admin-api')->logout();
+        $user->currentAccessToken()->delete();
     }
 }

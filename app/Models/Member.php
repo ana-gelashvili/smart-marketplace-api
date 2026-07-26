@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
-use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
+use Laravel\Sanctum\HasApiTokens;
 
 /**
  * @property int $id
@@ -33,10 +33,10 @@ use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
  */
 #[Fillable(['name', 'email', 'password', 'phone', 'avatar_url', 'avatar_public_id'])]
 #[Hidden(['password', 'remember_token'])]
-class Member extends Authenticatable implements JWTSubject
+class Member extends Authenticatable
 {
     /** @use HasFactory<MemberFactory> */
-    use HasFactory, HasUuid, Notifiable, SoftDeletes;
+    use HasApiTokens, HasFactory, HasUuid, Notifiable, SoftDeletes;
 
     /**
      * Get the attributes that should be cast.
@@ -49,19 +49,6 @@ class Member extends Authenticatable implements JWTSubject
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
-    }
-
-    public function getJWTIdentifier(): mixed
-    {
-        return $this->getKey();
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
-    public function getJWTCustomClaims(): array
-    {
-        return [];
     }
 
     /**

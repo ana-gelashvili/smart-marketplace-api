@@ -13,5 +13,5 @@ interface AdminAuthServiceInterface
 
     public function issueToken(User $user): string;
 
-    public function logout(): void;
+    public function logout(User $user): void;
 }

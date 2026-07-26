@@ -4,14 +4,15 @@ use App\Exceptions\EmptyCartException;
 use App\Exceptions\InsufficientStockException;
 use App\Exceptions\InvalidPaymentStatusException;
 use App\Exceptions\OrderNotPayableException;
-use App\Http\Middleware\EnsureAdminAccess;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
-use PHPOpenSourceSaver\JWTAuth\Exceptions\JWTException;
+use Laravel\Sanctum\Http\Middleware\CheckAbilities;
+use Laravel\Sanctum\Http\Middleware\CheckForAnyAbility;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -23,7 +24,8 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
-            'admin.guard' => EnsureAdminAccess::class,
+            'abilities' => CheckAbilities::class,
+            'ability' => CheckForAnyAbility::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
@@ -51,13 +53,13 @@ return Application::configure(basePath: dirname(__DIR__))
             }
         });
 
-        $exceptions->render(function (JWTException $e, Request $request) {
+        $exceptions->render(function (AuthorizationException $e, Request $request) {
             if ($request->is('api/*')) {
                 return response()->json([
                     'success' => false,
                     'message' => $e->getMessage(),
                     'errors' => null,
-                ], 401);
+                ], 403);
             }
         });
 

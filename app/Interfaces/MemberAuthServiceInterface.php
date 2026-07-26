@@ -18,5 +18,5 @@ interface MemberAuthServiceInterface
 
     public function issueToken(Member $member): string;
 
-    public function logout(): void;
+    public function logout(Member $member): void;
 }
