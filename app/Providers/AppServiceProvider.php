@@ -2,10 +2,12 @@
 
 namespace App\Providers;
 
+use App\Interfaces\AdminAuthServiceInterface;
 use App\Interfaces\BrandServiceInterface;
 use App\Interfaces\CategoryServiceInterface;
 use App\Interfaces\MemberAuthServiceInterface;
 use App\Interfaces\ProductServiceInterface;
+use App\Services\AdminAuthService;
 use App\Services\BrandService;
 use App\Services\CategoryService;
 use App\Services\MemberAuthService;
@@ -27,6 +29,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ProductServiceInterface::class, ProductService::class);
         $this->app->bind(CategoryServiceInterface::class, CategoryService::class);
         $this->app->bind(BrandServiceInterface::class, BrandService::class);
+        $this->app->bind(AdminAuthServiceInterface::class, AdminAuthService::class);
     }
 
     /**
