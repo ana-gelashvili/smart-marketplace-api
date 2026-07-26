@@ -25,4 +25,32 @@ class CategoryService implements CategoryServiceInterface
             ->with($with)
             ->get();
     }
+
+    public function findById(int $id): Category
+    {
+        return Category::query()->findOrFail($id);
+    }
+
+    /**
+     * @param  array<string, mixed>  $data
+     */
+    public function create(array $data): Category
+    {
+        return Category::query()->create($data);
+    }
+
+    /**
+     * @param  array<string, mixed>  $data
+     */
+    public function update(Category $category, array $data): Category
+    {
+        $category->update($data);
+
+        return $category->fresh() ?? $category;
+    }
+
+    public function delete(Category $category): void
+    {
+        $category->delete();
+    }
 }

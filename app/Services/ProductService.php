@@ -56,4 +56,48 @@ class ProductService implements ProductServiceInterface
             ->withCount('reviews')
             ->firstOrFail();
     }
+
+    /**
+     * @return LengthAwarePaginator<int, Product>
+     */
+    public function paginateForAdmin(): LengthAwarePaginator
+    {
+        return Product::query()
+            ->with(['category', 'brand', 'images'])
+            ->latest()
+            ->paginate(15);
+    }
+
+    public function findById(int $id): Product
+    {
+        return Product::query()
+            ->with(['category', 'brand', 'images'])
+            ->withCount('reviews')
+            ->findOrFail($id);
+    }
+
+    /**
+     * @param  array<string, mixed>  $data
+     */
+    public function create(array $data): Product
+    {
+        $product = Product::query()->create($data);
+
+        return $product->fresh(['category', 'brand', 'images']) ?? $product;
+    }
+
+    /**
+     * @param  array<string, mixed>  $data
+     */
+    public function update(Product $product, array $data): Product
+    {
+        $product->update($data);
+
+        return $product->fresh(['category', 'brand', 'images']) ?? $product;
+    }
+
+    public function delete(Product $product): void
+    {
+        $product->delete();
+    }
 }

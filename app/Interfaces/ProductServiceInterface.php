@@ -14,4 +14,23 @@ interface ProductServiceInterface
     public function paginate(array $filters): LengthAwarePaginator;
 
     public function findBySlug(string $slug): Product;
+
+    /**
+     * @return LengthAwarePaginator<int, Product>
+     */
+    public function paginateForAdmin(): LengthAwarePaginator;
+
+    public function findById(int $id): Product;
+
+    /**
+     * @param  array<string, mixed>  $data
+     */
+    public function create(array $data): Product;
+
+    /**
+     * @param  array<string, mixed>  $data
+     */
+    public function update(Product $product, array $data): Product;
+
+    public function delete(Product $product): void;
 }
