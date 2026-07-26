@@ -95,4 +95,12 @@ class Member extends Authenticatable implements JWTSubject
     {
         return $this->belongsToMany(Product::class, 'wishlists')->withTimestamps();
     }
+
+    /**
+     * @return HasMany<Order, $this>
+     */
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class);
+    }
 }
