@@ -1,5 +1,6 @@
 <?php
 
+use App\Exceptions\EmptyCartException;
 use App\Exceptions\InsufficientStockException;
 use App\Http\Middleware\EnsureAdminAccess;
 use Illuminate\Auth\AuthenticationException;
@@ -69,6 +70,16 @@ return Application::configure(basePath: dirname(__DIR__))
         });
 
         $exceptions->render(function (InsufficientStockException $e, Request $request) {
+            if ($request->is('api/*')) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $e->getMessage(),
+                    'errors' => null,
+                ], 422);
+            }
+        });
+
+        $exceptions->render(function (EmptyCartException $e, Request $request) {
             if ($request->is('api/*')) {
                 return response()->json([
                     'success' => false,

@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\V1\CartController;
 use App\Http\Controllers\Api\V1\CategoryAdminController;
 use App\Http\Controllers\Api\V1\CategoryController;
 use App\Http\Controllers\Api\V1\MemberAuthController;
+use App\Http\Controllers\Api\V1\OrderController;
 use App\Http\Controllers\Api\V1\ProductAdminController;
 use App\Http\Controllers\Api\V1\ProductController;
 use Illuminate\Support\Facades\Route;
@@ -29,6 +30,12 @@ Route::prefix('v1')->group(function (): void {
         Route::post('/items', [CartController::class, 'addItem']);
         Route::put('/items/{id}', [CartController::class, 'updateItem']);
         Route::delete('/items/{id}', [CartController::class, 'removeItem']);
+    });
+
+    Route::middleware('auth:api')->prefix('orders')->group(function (): void {
+        Route::post('/checkout', [OrderController::class, 'checkout']);
+        Route::get('/', [OrderController::class, 'index']);
+        Route::get('/{uuid}', [OrderController::class, 'show']);
     });
 
     Route::get('/products', [ProductController::class, 'index']);

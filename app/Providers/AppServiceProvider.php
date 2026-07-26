@@ -7,12 +7,14 @@ use App\Interfaces\BrandServiceInterface;
 use App\Interfaces\CartServiceInterface;
 use App\Interfaces\CategoryServiceInterface;
 use App\Interfaces\MemberAuthServiceInterface;
+use App\Interfaces\OrderServiceInterface;
 use App\Interfaces\ProductServiceInterface;
 use App\Services\AdminAuthService;
 use App\Services\BrandService;
 use App\Services\CartService;
 use App\Services\CategoryService;
 use App\Services\MemberAuthService;
+use App\Services\OrderService;
 use App\Services\ProductService;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
@@ -33,6 +35,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(BrandServiceInterface::class, BrandService::class);
         $this->app->bind(AdminAuthServiceInterface::class, AdminAuthService::class);
         $this->app->bind(CartServiceInterface::class, CartService::class);
+        $this->app->bind(OrderServiceInterface::class, OrderService::class);
     }
 
     /**
