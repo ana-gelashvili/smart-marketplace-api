@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\V1\Admin\AdminAuthController;
 use App\Http\Controllers\Api\V1\BrandAdminController;
 use App\Http\Controllers\Api\V1\BrandController;
+use App\Http\Controllers\Api\V1\CartController;
 use App\Http\Controllers\Api\V1\CategoryAdminController;
 use App\Http\Controllers\Api\V1\CategoryController;
 use App\Http\Controllers\Api\V1\MemberAuthController;
@@ -21,6 +22,13 @@ Route::prefix('v1')->group(function (): void {
             Route::post('/logout', [MemberAuthController::class, 'logout']);
             Route::get('/profile', [MemberAuthController::class, 'profile']);
         });
+    });
+
+    Route::middleware('auth:api')->prefix('cart')->group(function (): void {
+        Route::get('/', [CartController::class, 'index']);
+        Route::post('/items', [CartController::class, 'addItem']);
+        Route::put('/items/{id}', [CartController::class, 'updateItem']);
+        Route::delete('/items/{id}', [CartController::class, 'removeItem']);
     });
 
     Route::get('/products', [ProductController::class, 'index']);

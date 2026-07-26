@@ -1,5 +1,6 @@
 <?php
 
+use App\Exceptions\InsufficientStockException;
 use App\Http\Middleware\EnsureAdminAccess;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Application;
@@ -64,6 +65,16 @@ return Application::configure(basePath: dirname(__DIR__))
                     'message' => 'Resource not found',
                     'errors' => null,
                 ], 404);
+            }
+        });
+
+        $exceptions->render(function (InsufficientStockException $e, Request $request) {
+            if ($request->is('api/*')) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $e->getMessage(),
+                    'errors' => null,
+                ], 422);
             }
         });
     })->create();
