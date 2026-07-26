@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\V1\CategoryAdminController;
 use App\Http\Controllers\Api\V1\CategoryController;
 use App\Http\Controllers\Api\V1\MemberAuthController;
 use App\Http\Controllers\Api\V1\OrderController;
+use App\Http\Controllers\Api\V1\PaymentController;
 use App\Http\Controllers\Api\V1\ProductAdminController;
 use App\Http\Controllers\Api\V1\ProductController;
 use Illuminate\Support\Facades\Route;
@@ -36,6 +37,13 @@ Route::prefix('v1')->group(function (): void {
         Route::post('/checkout', [OrderController::class, 'checkout']);
         Route::get('/', [OrderController::class, 'index']);
         Route::get('/{uuid}', [OrderController::class, 'show']);
+        Route::get('/{uuid}/payments', [PaymentController::class, 'indexForOrder']);
+    });
+
+    Route::middleware('auth:api')->prefix('payments')->group(function (): void {
+        Route::post('/', [PaymentController::class, 'store']);
+        Route::post('/{id}/success', [PaymentController::class, 'success']);
+        Route::post('/{id}/failed', [PaymentController::class, 'failed']);
     });
 
     Route::get('/products', [ProductController::class, 'index']);

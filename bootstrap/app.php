@@ -2,6 +2,8 @@
 
 use App\Exceptions\EmptyCartException;
 use App\Exceptions\InsufficientStockException;
+use App\Exceptions\InvalidPaymentStatusException;
+use App\Exceptions\OrderNotPayableException;
 use App\Http\Middleware\EnsureAdminAccess;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Application;
@@ -80,6 +82,26 @@ return Application::configure(basePath: dirname(__DIR__))
         });
 
         $exceptions->render(function (EmptyCartException $e, Request $request) {
+            if ($request->is('api/*')) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $e->getMessage(),
+                    'errors' => null,
+                ], 422);
+            }
+        });
+
+        $exceptions->render(function (OrderNotPayableException $e, Request $request) {
+            if ($request->is('api/*')) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $e->getMessage(),
+                    'errors' => null,
+                ], 422);
+            }
+        });
+
+        $exceptions->render(function (InvalidPaymentStatusException $e, Request $request) {
             if ($request->is('api/*')) {
                 return response()->json([
                     'success' => false,
