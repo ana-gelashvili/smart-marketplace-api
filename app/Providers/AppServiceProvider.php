@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\Interfaces\AdminAuthServiceInterface;
+use App\Interfaces\AiDataServiceInterface;
+use App\Interfaces\AiServiceInterface;
 use App\Interfaces\BrandServiceInterface;
 use App\Interfaces\CartServiceInterface;
 use App\Interfaces\CategoryServiceInterface;
@@ -11,6 +13,8 @@ use App\Interfaces\OrderServiceInterface;
 use App\Interfaces\PaymentServiceInterface;
 use App\Interfaces\ProductServiceInterface;
 use App\Services\AdminAuthService;
+use App\Services\AiDataService;
+use App\Services\AiService;
 use App\Services\BrandService;
 use App\Services\CartService;
 use App\Services\CategoryService;
@@ -39,6 +43,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(CartServiceInterface::class, CartService::class);
         $this->app->bind(OrderServiceInterface::class, OrderService::class);
         $this->app->bind(PaymentServiceInterface::class, PaymentService::class);
+        $this->app->bind(AiServiceInterface::class, AiService::class);
+        $this->app->bind(AiDataServiceInterface::class, AiDataService::class);
     }
 
     /**

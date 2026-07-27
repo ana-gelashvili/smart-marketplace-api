@@ -4,6 +4,7 @@ use App\Exceptions\EmptyCartException;
 use App\Exceptions\InsufficientStockException;
 use App\Exceptions\InvalidPaymentStatusException;
 use App\Exceptions\OrderNotPayableException;
+use App\Http\Middleware\VerifyAiServiceKey;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Application;
@@ -26,6 +27,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'abilities' => CheckAbilities::class,
             'ability' => CheckForAnyAbility::class,
+            'ai-service' => VerifyAiServiceKey::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

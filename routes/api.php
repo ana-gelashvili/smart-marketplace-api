@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\V1\Admin\AdminAuthController;
+use App\Http\Controllers\Api\V1\AiDataController;
 use App\Http\Controllers\Api\V1\BrandAdminController;
 use App\Http\Controllers\Api\V1\BrandController;
 use App\Http\Controllers\Api\V1\CartController;
@@ -11,6 +12,7 @@ use App\Http\Controllers\Api\V1\OrderController;
 use App\Http\Controllers\Api\V1\PaymentController;
 use App\Http\Controllers\Api\V1\ProductAdminController;
 use App\Http\Controllers\Api\V1\ProductController;
+use App\Http\Controllers\Api\V1\RecommendationController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function (): void {
@@ -44,6 +46,15 @@ Route::prefix('v1')->group(function (): void {
         Route::post('/', [PaymentController::class, 'store']);
         Route::post('/{id}/success', [PaymentController::class, 'success']);
         Route::post('/{id}/failed', [PaymentController::class, 'failed']);
+    });
+
+    Route::middleware(['auth:member-api', 'abilities:member-api'])->group(function (): void {
+        Route::get('/recommendations', [RecommendationController::class, 'index']);
+    });
+
+    Route::middleware('ai-service')->prefix('ai')->group(function (): void {
+        Route::get('/members/{member}/profile', [AiDataController::class, 'profile']);
+        Route::get('/products/candidates', [AiDataController::class, 'candidates']);
     });
 
     Route::get('/products', [ProductController::class, 'index']);
